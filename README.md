@@ -8,26 +8,28 @@
 ## Contrat Deploy:
 
 ```console
-# 1'i seçelim:
+# altta ki curl ile başlayan komutu girdikten sonra 1 i seçelim:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 
-# solana cli kurulumu
+# solana cli kurulumu - komutları tek tek kullanalım.
 sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
 PATH="/root/.local/share/solana/install/active_release/bin:$PATH"
 solana config set --url https://staging-rpc.dev.eclipsenetwork.xyz
 
-# key oluşacak, şifre belirleyip mnemonicleri ve cüzdan adresini kaydediyoruz
+# bu komut sonrası => key oluşacak, şifre belirleyip mnemonicleri ve cüzdan adresini kaydediyoruz
 solana-keygen new
 
-# cüzdana token alıyoruz
+# bu komutta cüzdana token alıyoruz
 solana airdrop 10
 
 # bu komut çalışması için 8 ram lazım - github swap space repom ile çözersiniz.
 solana-test-validator
 # komut çalışınca ctrl c ile durdurabilirsiniz.
 
-# nodejs kurulumu
+# 5 gün sonra not - 8 RAM ile dahi çözülmediyse farklı bir durum söz konusu - chatte yardım isteyiniz.
+
+# nodejs kurulumu - komutları tek tek kullanalım
 sudo apt-get install -y ca-certificates curl gnupg
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
@@ -37,14 +39,15 @@ echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.co
 sudo apt-get update
 sudo apt-get install nodejs -y
 
-# kontrat deploy 
+# kontrat deploy işlemini gerçekleştirelim
 git clone https://github.com/solana-labs/example-helloworld
 cd example-helloworld
 npm install
 
-# burda biraz bekletecek rusttan dolayı
+# burda biraz bekletecek rusttan dolayı - uzun sürebilir.
 npm run build:program-rust
-# program id not edin
+
+# program id not edin - FORMDA SONRADAN BU ID KULLANACAKSINIZ
 solana program deploy dist/program/helloworld.so
 npm run start
 # success çıktısı verecek en sonda.
